@@ -1,20 +1,20 @@
-import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import Order, { orderLoader } from "./pages/Order";
-import RootLayout from "./RootLayout";
-import OrderNotFound from "./pages/OrderNotFound";
+import Order from "./pages/Order";
+import RootLayout from "./components/RootLayout";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
-      <Route index={true} element={<Home />} />
-      <Route path="/menu" element={<Menu />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route errorElement={<OrderNotFound />} loader={orderLoader} path="/order/:orderId" element={<Order />} />
+      <Route path="/" element={<Home />} errorElement={<ErrorPage />} />
+      <Route path="/menu" element={<Menu />} errorElement={<ErrorPage />} />
+      <Route path="/cart" element={<Cart />} errorElement={<ErrorPage />} />
+      <Route path="/checkout" element={<Checkout />} errorElement={<ErrorPage />} />
+      <Route path="/order/:orderId" element={<Order />} errorElement={<ErrorPage />} />
     </Route>
   )
 );

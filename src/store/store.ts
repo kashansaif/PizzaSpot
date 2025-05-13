@@ -1,22 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import cartReducer from "./CartSlice";
-import persistStore from "redux-persist/es/persistStore";
-import orderReducer from "./oderSlice";
+import cartReducer from "./cartSlice";
+import { persistStore } from "redux-persist";
+import orderReducer from "./orderSlice";
 
 export const store = configureStore({
   reducer: {
     cart: cartReducer,
-    orders: orderReducer,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist/PERSIST"],
-      },
-    });
+    return getDefaultMiddleware({ serializableCheck: { ignoredActions: ["persist/PERSIST"] } });
   },
 });
 
 export const persistor = persistStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
-export type appDispatch = typeof store.dispatch;
+export type AppDispatch = typeof store.dispatch;

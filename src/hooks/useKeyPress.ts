@@ -2,15 +2,15 @@ import { useEffect } from "react";
 
 export const useKeyPress = (targetKey: string, callback: () => void) => {
   useEffect(() => {
-    const handleKeyup = (ev: KeyboardEvent) => {
+    const handleKeyUp = (ev: KeyboardEvent) => {
       const { ctrlKey, shiftKey, key } = ev;
-      if (ctrlKey && shiftKey && key == targetKey) {
+      if (ctrlKey && shiftKey && key === targetKey) {
         callback();
       }
     };
-    document.addEventListener("keyup", handleKeyup);
+    document.addEventListener("keyup", handleKeyUp);
     return () => {
-      document.removeEventListener("keyup", handleKeyup);
+      document.removeEventListener("keyup", handleKeyUp);
     };
   }, [targetKey, callback]);
 };

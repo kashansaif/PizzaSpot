@@ -6,7 +6,7 @@ const OrderNotFound = () => {
   return (
     <div className="text-center my-6">
       <BackBtn to={"/menu"}>Back to menu</BackBtn>
-      <h2 className="text-3xl">{(error as Error).message}"Order Not Found"</h2>
+      <h2 className="text-3xl">{(error as Error).message}</h2>
     </div>
   );
 };

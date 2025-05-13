@@ -1,4 +1,4 @@
-export type Pizza = {
+  export type Pizza = {
   title: string;
   ingredients: string[];
   price: number;

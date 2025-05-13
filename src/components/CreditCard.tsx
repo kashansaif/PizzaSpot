@@ -13,10 +13,10 @@ type CardState = {
 };
 
 type CreditCardProps = {
-  submitHandler: (state: Omit<CardState, "focus">) => void;
+  handleSubmit: (state: Omit<CardState, "focus">) => void;
 };
 
-const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
+const CreditCard: FC<CreditCardProps> = ({ handleSubmit }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [state, setState] = useState<CardState>({
     number: "",
@@ -48,29 +48,23 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
     setState((prev) => ({ ...prev, focus: targetName }));
   };
 
-  const setInputValue = (inputName: string, value: string) => {
-    const target = formRef.current?.elements.namedItem(inputName) as HTMLInputElement;
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")!.set;
-    nativeInputValueSetter!.call(target, value);
-    const inputEvent = new Event("input", { bubbles: true });
-    target.dispatchEvent(inputEvent);
-  };
-
   useKeyPress("H", () => {
-    console.log("press");
-    setInputValue("number", "2222 2222 2222 2222");
-    setInputValue("cvc", "123");
-    setInputValue("expiry", "12/25 ");
-    setInputValue("name", "Kashan Saif");
+    setState((prev) => ({
+      ...prev,
+      number: "2222 2222 2222 2222",
+      name: "Kashan Saif",
+      expiry: "1234",
+      cvc: "12345",
+    }));
   });
 
   return (
     <form
       onSubmit={(ev) => {
         ev.preventDefault();
-        // eslint-disable-next-line
-        const { focus, ...restOfTheState } = state;
-        submitHandler(restOfTheState);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { focus, ...rest } = state;
+        handleSubmit(rest);
       }}
       ref={formRef}
       className="flex flex-col gap-4 items-center"
@@ -85,6 +79,7 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
             pattern="^(\d\s?){16}(?=\D*$)|(\d\s?){19}(?=\D*$)$"
             required
             className="input input-bordered w-full max-w-xs"
+            value={state.number}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -97,6 +92,7 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
             className="input input-bordered w-full max-w-xs"
             placeholder="Name"
             required
+            value={state.name}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -109,6 +105,7 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
             placeholder="Valid Thru (MM/YY)"
             pattern="^(0[1-9]|1[0-2])\/\d{2}$"
             required
+            value={state.expiry}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -121,6 +118,7 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
             placeholder="CVC"
             pattern="\d{3,4}"
             required
+            value={state.cvc}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
           />
@@ -131,7 +129,6 @@ const CreditCard: FC<CreditCardProps> = ({ submitHandler }) => {
           PAY
         </button>
       </div>{" "}
-      <small>Ctrl + Shift + H</small>
     </form>
   );
 };

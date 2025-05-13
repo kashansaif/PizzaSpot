@@ -1,19 +1,19 @@
+import Header from "./Header";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
 
-function RootLayout() {
+const RootLayout = () => {
   return (
     <>
       <Header />
       <main>
         <div className="py-4">
-          <section className="max-w-3xl mx-auto">
+          <section className="max-w-3xl m-auto">
             <Outlet />
           </section>
         </div>
       </main>
     </>
   );
-}
+};
 
 export default RootLayout;

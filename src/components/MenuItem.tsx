@@ -1,14 +1,15 @@
 import { FC } from "react";
-import { useAppDispatch } from "../store/hooks";
-import { addItem, CartItem, deleteItem, removeItem } from "../store/CartSlice";
+import { Pizza } from "../data/menu-items";
+import { useAppDispatch, useAppSelector } from "../store/hooks.";
+import { addItem, deleteItem, removeItem, selectItemQuantity } from "../store/cartSlice";
 
-export type MenuItemProps = {
-  item: CartItem;
+type MenuItemProps = {
+  item: Pizza;
   readonly?: boolean;
 };
 const MenuItem: FC<MenuItemProps> = ({ item, readonly }) => {
-  const quantity = item.quantity;
   const dispatch = useAppDispatch();
+  const quantity = useAppSelector(selectItemQuantity(item));
   return (
     <div className="card px-4 card-side bg-base-300 shadow-xl">
       <figure className="w-32 min-w-32 mask mask-squircle">
@@ -19,16 +20,8 @@ const MenuItem: FC<MenuItemProps> = ({ item, readonly }) => {
         <div>{item.ingredients.join(", ")}</div>
         <div className={`card-actions justify-between items-end`}>
           <b className="font-semibold">€{item.price}</b>
-          {quantity == 0 ? (
-            <button
-              onClick={() => {
-                dispatch(addItem(item));
-              }}
-              className="btn btn-primary"
-            >
-              Add to Cart
-            </button>
-          ) : (
+
+          {quantity > 0 ? (
             <div className="flex gap-4 items-center">
               {!readonly && (
                 <button
@@ -63,7 +56,12 @@ const MenuItem: FC<MenuItemProps> = ({ item, readonly }) => {
                       />
                     </svg>
                   </button>
-                  <button className="btn btn-sm md:btn-md btn-primary ml-4">
+                  <button
+                    onClick={() => {
+                      dispatch(deleteItem(item));
+                    }}
+                    className="btn btn-sm md:btn-md btn-primary ml-4"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -79,18 +77,20 @@ const MenuItem: FC<MenuItemProps> = ({ item, readonly }) => {
                       />
                     </svg>
 
-                    <span
-                      onClick={() => {
-                        dispatch(deleteItem(item));
-                      }}
-                      className="hidden md:block"
-                    >
-                      Delete
-                    </span>
+                    <span className="hidden md:block">Delete</span>
                   </button>{" "}
                 </>
               )}
             </div>
+          ) : (
+            <button
+              onClick={() => {
+                dispatch(addItem(item));
+              }}
+              className="btn btn-primary"
+            >
+              Add to Cart
+            </button>
           )}
         </div>
       </div>
